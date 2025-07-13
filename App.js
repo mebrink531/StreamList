@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
-import { FaHome, FaFilm, FaShoppingCart, FaInfoCircle } from 'react-icons/fa';
+import { FaHome, FaFilm, FaShoppingCart, FaInfoCircle, FaEdit, FaTrash, FaCheck } from 'react-icons/fa';
 
 function App() {
   return (
@@ -31,11 +31,38 @@ function App() {
 
 function StreamList() {
   const [streamInput, setStreamInput] = useState('');
+  const [streams, setStreams] = useState([]);
+  const [editIndex, setEditIndex] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Stream Input:', streamInput);
+    if (!streamInput.trim()) return;
+
+    if (editIndex !== null) {
+      const updated = [...streams];
+      updated[editIndex].text = streamInput;
+      setStreams(updated);
+      setEditIndex(null);
+    } else {
+      setStreams([...streams, { text: streamInput, completed: false }]);
+    }
+
     setStreamInput('');
+  };
+
+  const handleDelete = (index) => {
+    setStreams(streams.filter((_, i) => i !== index));
+  };
+
+  const handleEdit = (index) => {
+    setStreamInput(streams[index].text);
+    setEditIndex(index);
+  };
+
+  const handleComplete = (index) => {
+    const updated = [...streams];
+    updated[index].completed = !updated[index].completed;
+    setStreams(updated);
   };
 
   return (
@@ -48,8 +75,21 @@ function StreamList() {
           onChange={(e) => setStreamInput(e.target.value)}
           placeholder="Enter a stream name..."
         />
-        <button type="submit">Submit</button>
+        <button type="submit">{editIndex !== null ? 'Update' : 'Submit'}</button>
       </form>
+
+      <ul className="stream-list">
+        {streams.map((item, index) => (
+          <li key={index} className={item.completed ? 'completed' : ''}>
+            {item.text}
+            <div className="actions">
+              <button onClick={() => handleEdit(index)}><FaEdit /></button>
+              <button onClick={() => handleDelete(index)}><FaTrash /></button>
+              <button onClick={() => handleComplete(index)}><FaCheck /></button>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
