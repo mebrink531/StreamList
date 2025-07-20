@@ -1,0 +1,1 @@
+const Cart = () => <div><h2>Cart Page (Coming Soon)</h2></div>; export default Cart;

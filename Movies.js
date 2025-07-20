@@ -1,0 +1,1 @@
+const Movies = () => <div><h2>Movies Page (Coming Soon)</h2></div>; export default Movies;
