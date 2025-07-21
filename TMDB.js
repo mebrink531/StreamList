@@ -5,7 +5,7 @@ function TMDB() {
 
   useEffect(() => {
     const fetchMovies = async () => {
-      const res = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=demo`);
+      const res = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=49c4858bf411c1add63586f611236d34`);
       const data = await res.json();
       setMovies(data.results);
     };
